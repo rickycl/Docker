@@ -1,0 +1,42 @@
+Orchestrating Container lifecylcles with Docker Swarm
+
+Deploy an NGINX version 1.16.1 service to the swarm and change the listening port to 8081
+
+Scale the swarm down to 1 task and then up to 5 tasks
+
+Apply a rolling update to the NGINX service to latest
+
+Drain the node, then set it back to active
+
+# To obtain the IP address
+ip a
+
+sudo docker swarm init --advertise-addr <IP address> --listen-addr 0.0.0.0
+
+sudo docker service create --replicas 3 --name webserver nginx:1.16.1
+
+# To validate that the service is created and running
+sudo docker service ls
+
+# Since the the published ports is blank as the web server is not accessible, we need to publish a listening port
+sudo docker service update --publish-add 8081:80 webserver
+# Now the column PORTS has an entry, *:8081->80/tcp
+# To confirm that the port is up and running, go to localhost:8081/
+
+# Scaling the service means adding/removing extra containers to provide the same function
+sudo docker service scale webserver=1
+
+# To view the container running the service
+sudo docker ps
+
+# To scale the service up to 5 tasks
+sudo docker service scale webserver=5
+
+# To apply a rolling update to push the latest version of the Docker image to the containers
+sudo docker service update --image nginx webserver
+
+# To stop the node from receiving requests to the contain<er running on it and put it into a form of maintenance node
+sudo docker node update --availability drain patrick-virtual-machine
+
+# To turn the node back to active
+sudo docker node update --availability active patrick-virtual-machine

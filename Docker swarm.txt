@@ -1,5 +1,3 @@
-Orchestrating Container lifecylcles with Docker Swarm
-
 Deploy an NGINX version 1.16.1 service to the swarm and change the listening port to 8081
 
 Scale the swarm down to 1 task and then up to 5 tasks

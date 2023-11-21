@@ -1,0 +1,36 @@
+Bridge Networks facilitates communication between containers within a single docker host
+sudo docker network create demo-network
+
+# List all networks on docker machine
+sudo docker network ls
+
+# To create and run a new container
+sudo docker run --name demo-mysql-1 --rm -e MYSQL_ROOT_PASSWORD=root mysql
+
+# On a new terminal, to obtain the details of the new container
+sudo docker container inspect demo-mysql-1
+
+# Connect my running container to that network to be created
+sudo docker network connect demo-network demo-mysql-1
+
+# Inspect my container again to check that we are connected to 2 networks(bridge and demo-network)
+sudo docker container inspect demo-mysql-1
+
+# To disconnect from the default bridge
+sudo docker network disconnect bridge demo-mysql-1
+
+# Inspect my container again to check if there is only demo-network
+sudo docker container inspect demo-mysql-1
+
+sudo docker run --name demo-mysql-2 --network demo-network --rm -e MYSQL_ROOT_PASSWORD=root mysql
+
+# Inspect new container to check that there is only one network. The new container will not go on the default network
+sudo docker container inspect demo-mysql-2
+
+# To remove the demo-network created and the active endpoints, close the terminal
+sudo docker network rm demo-network
+
+# To verify that it has been removed
+sudo docker network ls
+
+Bridge networks can control which docker containers can communicate with one another in a single host in docker. Bridge networks can be easily defined and either assign new containers to a network when they are created or connect existing containers to a network on the fly. A container can belong to multiple networks and will be able to communicate with other containers in that same network

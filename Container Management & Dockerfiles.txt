@@ -1,0 +1,53 @@
+Docker containers are runtime instances of a docker image
+# To view all the local images on docker host for which a container can be run
+sudo docker images
+
+# To search for the image 'ubuntu'
+sudo docker search ubuntu
+
+sudo docker pull ubuntu:latest
+
+# To run the container ubuntu
+sudo docker run -i -t ubuntu
+
+# To view the currently running containers
+sudo docker ps
+
+# To show all containers whether running or not
+sudo docker ps -a
+
+# To rename a container
+sudo docker rename <current name> <new name>
+
+sudo docker start <new name>
+# To interact with the container
+sudo docker attach <new name>mkdir /testscriptsls
+
+# To run a new container from the same base image called 'ubuntu'
+sudo docker run -i -t ubuntu
+
+# To view the 2 containers with 2 different IDs but built from the same image
+sudo docker ps -a
+
+# To remove a container
+sudo docker rm <name>
+
+# To remove all the containers
+sudo docker rm $(sudo docker ps -aq) or
+sudo docker rmi $(sudo docker images -q)
+
+\: escape character (spanning multiple lines)
+FROM: Base image from which new image will be created (e.g. FROM httpd:latest)
+MAINTAINER: Name of author
+COPY: Copy files from Docker host into Docker image (e.g. COPY index.html /usr/local/apache2/htdocs/
+ADD: Similar to COPY; can also pull items from a URL
+
+VOLUME: Creates specified directories in the container; contents are also available in the Docker host file system under /var/lib/docker/volumes/<volume_ID>/_data
+
+EXPOSE: Documents which ports are used; docker run -p 80:80 opens the port in the container's network interface
+
+CMD: Runs a command when container is launched
+RUN: Runs a command used to create the custom image
+
+To create the custom Docker image: sudo docker build <path or URL> e.g. sudo docker build -t customimage1
+To use the custom Docker image: sudo docker run -p 80:80 -i -t customimage1
